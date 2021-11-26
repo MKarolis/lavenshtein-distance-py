@@ -1,0 +1,11 @@
+name: deps
+channels:
+  - defaults
+dependencies:
+  - numpy
+  - pandas
+  - openpyxl
+  - xlsxwriter
+  - numba
+  - cudatoolkit=11.2
+  - python-Levenshtein
