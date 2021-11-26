@@ -24,9 +24,9 @@ def get_distance_matrix(input_array) -> np.array:
     # Very fast, 10k - 214s, 1000 - 2s, 100 - under a second
     algorithm = use_levenshtein_library
     # Very slow, 100 - 17s
-    algorithm = use_custom_dp_algorithm 
+    # algorithm = use_custom_dp_algorithm 
     # Slow, 100 - 3.5s
-    algorithm = use_custom_dp_algorithm_optimized 
+    # algorithm = use_custom_dp_algorithm_optimized 
     return algorithm(input_array)
 
 

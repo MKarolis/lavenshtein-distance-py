@@ -3,7 +3,7 @@ import random
 import numpy as np
 from Levenshtein import distance
 
-TEST_DATA_SIZE = 10000
+TEST_DATA_SIZE = 100
 DEFAULT_MIN_STR_LENGTH = 5
 DEFAULT_MAX_STR_LENGTH = 60
 DEFAULT_CHARS_TO_CHOOSE = string.ascii_uppercase + string.digits + string.punctuation + ' '
