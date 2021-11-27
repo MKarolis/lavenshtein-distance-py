@@ -2,9 +2,12 @@ import numpy as np
 from utils import log_alg_time, log_alg_start
 import time
 from numba import jit
-from algorithms.dp_implementation import levenshteinDistanceDP
+from algorithms.dp_implementation import levenshtein_distance_DP
 
-optimizedDp = jit(levenshteinDistanceDP)
+optimizedDp = jit(levenshtein_distance_DP)
+
+# First call is required to compile the function
+optimizedDp('A', 'B')
 
 def use_custom_dp_algorithm_optimized(input_array) -> np.array:
     array_size = len(input_array)

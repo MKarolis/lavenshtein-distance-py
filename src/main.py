@@ -1,6 +1,8 @@
 from algorithms.library_plain import use_levenshtein_library
 from algorithms.dp_implementation import use_custom_dp_algorithm
 from algorithms.dp_implementation_numba import use_custom_dp_algorithm_optimized
+from algorithms.diagonal_implementation import use_diagonal_dp_algorithm_base
+from algorithms.cuda_diagonal_implementation import use_diagonal_cuda_algorithm
 from seed import DISTANCES_SAMPLE_FILENAME, TEXT_SAMPLE_FILENAME
 import pandas as pd
 import csv
@@ -20,13 +22,23 @@ def get_distance_matrix(input_array) -> np.array:
         where distance_matrix[i][j] is the Levenshtein distance from input_array[i] to input_array[j]
     """
     
-    # Change the following line to apply an algorithm of your choice
+    # Change the following lines to apply an algorithm of your choice
+
     # Very fast, 10k - 214s, 1000 - 2s, 100 - under a second
     algorithm = use_levenshtein_library
+
     # Very slow, 100 - 17s
     # algorithm = use_custom_dp_algorithm 
-    # Slow, 100 - 3.5s
+
+    # Slow, 100 - 2.4s
     # algorithm = use_custom_dp_algorithm_optimized 
+
+    # Slow, 100 - 2.2s
+    # algorithm = use_diagonal_dp_algorithm_base
+
+    # Overwhelmingly slow, 100 - 69s (Nice!)
+    # algorithm = use_diagonal_cuda_algorithm
+
     return algorithm(input_array)
 
 
@@ -54,6 +66,8 @@ def verify_matrix_correctness(input_array, computed_matrix: np.array):
                 input_array[diff[0]], input_array[diff[1]], computed_matrix[diff[0], diff[1]], target_matrix[diff[0], diff[1]]
             ))
             diffs_to_ignore.add((diff[1], diff[0]))
+        
+        print('{} errors in total'.format(len(diffs_to_ignore)))
     else:
         print('Distance validation succeeded!')
 
