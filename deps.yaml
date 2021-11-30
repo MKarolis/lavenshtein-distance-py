@@ -7,5 +7,5 @@ dependencies:
   - openpyxl
   - xlsxwriter
   - numba
-  - cudatoolkit=11.2
+  - cudatoolkit
   - python-Levenshtein
