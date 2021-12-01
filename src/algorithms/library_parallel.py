@@ -10,7 +10,6 @@ def dist(a, b):
 
     
 def calculatePartialMatrix(input_array, x, send_end):
-    print('hello')
     matrix = np.fromfunction(
         np.vectorize(lambda i, j: dist(x[i], input_array[j])), 
         (len(x), len(input_array)), 
@@ -19,7 +18,7 @@ def calculatePartialMatrix(input_array, x, send_end):
     send_end.send(matrix)
    
    
-def use_levenshtein_library(complete_array) -> np.array: 
+def use_levenshtein_library_parallel(complete_array) -> np.array: 
     array_size = len(complete_array)
     ncpus = cpu_count()
     equal_pieces = np.array_split(complete_array, ncpus)
@@ -28,6 +27,7 @@ def use_levenshtein_library(complete_array) -> np.array:
     pipe_list = []
     
     log_alg_start('python-levenshtein library methods')
+    start = time.perf_counter()
     
     for x in range(ncpus):
         recv_end, send_end = Pipe(False)
@@ -48,8 +48,6 @@ def use_levenshtein_library(complete_array) -> np.array:
 
     # print()
     # print(final)
-    
-    start = time.perf_counter()
 
     log_alg_time(time.perf_counter() - start)
 
