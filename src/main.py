@@ -1,12 +1,15 @@
+from algorithms.library_parallel import use_levenshtein_library_parallel
 from algorithms.library_plain import use_levenshtein_library
 from algorithms.dp_implementation import use_custom_dp_algorithm
 from algorithms.dp_implementation_numba import use_custom_dp_algorithm_optimized
 from algorithms.diagonal_implementation import use_diagonal_dp_algorithm_base
-from algorithms.cuda_diagonal_implementation import use_diagonal_cuda_algorithm
+#from algorithms.cuda_diagonal_implementation import use_diagonal_cuda_algorithm
 from seed import DISTANCES_SAMPLE_FILENAME, TEXT_SAMPLE_FILENAME
 import pandas as pd
 import csv
 import numpy as np
+import multiprocessing
+
 
 def get_distance_matrix(input_array) -> np.array:
     """
@@ -25,7 +28,10 @@ def get_distance_matrix(input_array) -> np.array:
     # Change the following lines to apply an algorithm of your choice
 
     # Very fast, 10k - 214s, 1000 - 2s, 100 - under a second
-    algorithm = use_levenshtein_library
+    # algorithm = use_levenshtein_library
+    
+    # Very fast, 0.00001 s - best till now
+    algorithm = use_levenshtein_library_parallel
 
     # Very slow, 100 - 17s
     # algorithm = use_custom_dp_algorithm 
@@ -70,6 +76,7 @@ def verify_matrix_correctness(input_array, computed_matrix: np.array):
         print('{} errors in total'.format(len(diffs_to_ignore)))
     else:
         print('Distance validation succeeded!')
+    
 
 
 if __name__ == '__main__':
