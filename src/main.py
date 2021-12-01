@@ -1,7 +1,5 @@
-from algorithms.library_parallel import use_levenshtein_library
-
-from algorithms.library_parallel import parallel
-
+# from algorithms.library_parallel import use_levenshtein_library
+from algorithms.library_plain import use_levenshtein_library
 from algorithms.dp_implementation import use_custom_dp_algorithm
 from algorithms.dp_implementation_numba import use_custom_dp_algorithm_optimized
 from algorithms.diagonal_implementation import use_diagonal_dp_algorithm_base
@@ -94,7 +92,7 @@ if __name__ == '__main__':
     matrix = get_distance_matrix(input_array)
 
     print('')
-    # verify_matrix_correctness(input_array, matrix)
+    verify_matrix_correctness(input_array, matrix)
 
     print()
     

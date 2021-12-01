@@ -1,77 +1,60 @@
 import numpy as np
 import time
 from Levenshtein import distance
-import multiprocessing
+from multiprocessing import Process, cpu_count, Pipe
 
 from utils import log_alg_start, log_alg_time
 
 def dist(a, b):
     return distance(a,b)
 
-def vectorize(input_array):
-    cpus = multiprocessing.cpu_count()
-    list = np.array_split(input_array, cpus)
     
-    new = []
-        
-    for x in list:
-        matrix = np.fromfunction(
-            np.vectorize(lambda i, j: distance(x[i], input_array[j])), 
-            (len(x), len(input_array)), 
-            dtype=int
-        )
-        print(matrix)
-        print()
-        
-    return np.vectorize(lambda i, j: dist(input_array[i], input_array[j]))
-
-def use_levenshtein_library(input_array) -> np.array: 
-    #parallel(input_array)
-    array_size = len(input_array)
-
-    log_alg_start('python-levenshtein library methods')
-
-    start = time.perf_counter()
+def calculatePartialMatrix(input_array, x, send_end):
+    print('hello')
     matrix = np.fromfunction(
-        vectorize(input_array), 
-        (array_size, array_size), 
+        np.vectorize(lambda i, j: dist(x[i], input_array[j])), 
+        (len(x), len(input_array)), 
         dtype=int
     )
+    send_end.send(matrix)
+   
+   
+def use_levenshtein_library(complete_array) -> np.array: 
+    array_size = len(complete_array)
+    ncpus = cpu_count()
+    equal_pieces = np.array_split(complete_array, ncpus)
+    
+    procesess = []
+    pipe_list = []
+    
+    log_alg_start('python-levenshtein library methods')
+    
+    for x in range(ncpus):
+        recv_end, send_end = Pipe(False)
+        process = Process(target=calculatePartialMatrix, args=(complete_array, equal_pieces[x], send_end,))
+        procesess.append(process)
+        pipe_list.append(recv_end)
+        process.start()
+        
+    for p in procesess:
+        p.join()
+        
+    result = [x.recv() for x in pipe_list]
+    final = np.empty([0,array_size], int)
+    for r in result:
+        final = np.append(final, r, axis= 0)
+        # print()
+        # print(r)
+
+    # print()
+    # print(final)
+    
+    start = time.perf_counter()
 
     log_alg_time(time.perf_counter() - start)
 
-    return matrix
-
-
-
-def parallel(input_array):
-    cpus = multiprocessing.cpu_count()
+    return final
     
-    array_size = len(input_array)
-    #valores = np.random.randint(100, size=50)
-    list = np.array_split(input_array, cpus)
-    print(len(list))
-    
-    procesess = []
-    
-    for i in range(cpus):
-        print()
-        
-        print(list[i])
-        
-        # print(use_levenshtein_library(list[i]))
-        
-        # process = multiprocessing.Process(target=use_levenshtein_library, args=(list[i]))
-        # procesess.append(process)
-        # process.start()
-        
-    # for process in procesess:
-    #     process.join()
-        
-    
-    
-    # print(input_array)
-    # print(array_size)
 
 
 
