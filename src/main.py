@@ -1,4 +1,5 @@
-from algorithms.library_parallel import use_levenshtein_library_parallel
+# from algorithms.library_parallel import use_levenshtein_library_parallel
+from algorithms.library_parallel_Fix import use_levenshtein_library_parallel
 from algorithms.library_plain import use_levenshtein_library
 from algorithms.dp_implementation import use_custom_dp_algorithm
 from algorithms.dp_implementation_numba import use_custom_dp_algorithm_optimized
