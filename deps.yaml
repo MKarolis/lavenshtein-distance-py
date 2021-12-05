@@ -11,4 +11,5 @@ dependencies:
   - cudatoolkit=11.2
   - python-Levenshtein
   - dask=2021.9.1
-  - polyleven 
+  - polyleven
+  - joblib
