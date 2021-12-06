@@ -1,5 +1,6 @@
 # from algorithms.library_parallel import use_levenshtein_library_parallel
 from algorithms.library_parallel_Fix import use_levenshtein_library_parallel
+from algorithms.library_parallel_dask import use_levenshtein_library_parallel_dask
 from algorithms.library_plain import use_levenshtein_library
 from algorithms.dp_implementation import use_custom_dp_algorithm
 from algorithms.dp_implementation_numba import use_custom_dp_algorithm_optimized
@@ -32,7 +33,10 @@ def get_distance_matrix(input_array) -> np.array:
     # algorithm = use_levenshtein_library
     
     # Very fast, 0.00001 s - best till now
-    algorithm = use_levenshtein_library_parallel
+    # algorithm = use_levenshtein_library_parallel
+    
+    # Very fast, 0.00001 s - best till now
+    algorithm = use_levenshtein_library_parallel_dask
 
     # Very slow, 100 - 17s
     # algorithm = use_custom_dp_algorithm 
