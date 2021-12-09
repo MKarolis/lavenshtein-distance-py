@@ -13,3 +13,4 @@ dependencies:
   - dask=2021.9.1
   - polyleven
   - joblib
+  - sparse
