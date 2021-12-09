@@ -8,12 +8,14 @@ from algorithms.dp_implementation_numba import use_custom_dp_algorithm_optimized
 from algorithms.diagonal_implementation import use_diagonal_dp_algorithm_base
 from algorithms.cuda_diagonal_implementation import use_diagonal_cuda_algorithm
 from algorithms.library_joblib import use_joblib
+from algorithms.library_joblib_sparse import use_joblib_sparse
 from seed import DISTANCES_SAMPLE_FILENAME, TEXT_SAMPLE_FILENAME
 import pandas as pd
 import csv
 import numpy as np
 
-def get_distance_matrix(input_array) -> np.array:
+
+def get_distance_matrix(input_array):
     """
     Calculates a matrix of Levenshtein distance for a given input array
 
@@ -31,6 +33,9 @@ def get_distance_matrix(input_array) -> np.array:
     # Fastest with big datasets, 10k - 11s, 1000 - 0.9s
     # algorithm = use_joblib
 
+    # Slightly slower than regular joblib, but avoids out of memory errors with big datasets 
+    algorithm = use_joblib_sparse
+
     # Fastest yet, 10k - 53s, 1000 - 0.45s, 100 - 0.005617s
     # algorithm = use_polyleven_library
 
@@ -41,7 +46,7 @@ def get_distance_matrix(input_array) -> np.array:
     # algorithm = use_levenshtein_library_parallel
     
     # Very fast, 1000 - 0.25s, 10k - 25s
-    algorithm = use_levenshtein_library_parallel_dask
+    # algorithm = use_levenshtein_library_parallel_dask
 
     # Very slow, 100 - 17s
     # algorithm = use_custom_dp_algorithm 
