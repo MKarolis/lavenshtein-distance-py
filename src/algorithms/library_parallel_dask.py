@@ -1,11 +1,9 @@
 import numpy as np
 import time
-<<<<<<< Updated upstream
-from polyleven import levenshtein
-=======
+# from polyleven import levenshtein
+
 from Levenshtein import distance
 from multiprocessing import cpu_count
->>>>>>> Stashed changes
 
 from utils import log_alg_start, log_alg_time
 
@@ -20,18 +18,6 @@ def fuc(a,b):
 
 
 def use_levenshtein_library_parallel_dask(input_array) -> np.array:
-<<<<<<< Updated upstream
-    log_alg_start('parallel implementation with dask')
-
-    start = time.perf_counter()
-    
-    matrix = da.frompyfunc(levenshtein, 2, 1).outer(input_array, input_array) 
-    
-    log_alg_time(time.perf_counter() - start)
-
-    return matrix
-=======
-
     log_alg_start('python-levenshtein with dask library methods')
 
     start = time.perf_counter()
@@ -58,4 +44,3 @@ def use_levenshtein_library_parallel_dask(input_array) -> np.array:
     
     return total.compute()
     # return matrix
->>>>>>> Stashed changes
