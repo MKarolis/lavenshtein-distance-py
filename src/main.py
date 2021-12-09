@@ -1,17 +1,17 @@
 # from algorithms.library_parallel import use_levenshtein_library_parallel
 from algorithms.library_parallel_Fix import use_levenshtein_library_parallel
 from algorithms.library_parallel_dask import use_levenshtein_library_parallel_dask
-from algorithms.library_plain import use_levenshtein_library
+from algorithms.library_python_levenshtein import use_levenshtein_library
+from algorithms.library_polyleven import use_polyleven_library
 from algorithms.dp_implementation import use_custom_dp_algorithm
 from algorithms.dp_implementation_numba import use_custom_dp_algorithm_optimized
 from algorithms.diagonal_implementation import use_diagonal_dp_algorithm_base
-#from algorithms.cuda_diagonal_implementation import use_diagonal_cuda_algorithm
+from algorithms.cuda_diagonal_implementation import use_diagonal_cuda_algorithm
+from algorithms.library_joblib import use_joblib
 from seed import DISTANCES_SAMPLE_FILENAME, TEXT_SAMPLE_FILENAME
 import pandas as pd
 import csv
 import numpy as np
-import multiprocessing
-
 
 def get_distance_matrix(input_array) -> np.array:
     """
@@ -28,14 +28,19 @@ def get_distance_matrix(input_array) -> np.array:
     """
     
     # Change the following lines to apply an algorithm of your choice
+    # Fastest with big datasets, 10k - 11s, 1000 - 0.9s
+    # algorithm = use_joblib
+
+    # Fastest yet, 10k - 53s, 1000 - 0.45s, 100 - 0.005617s
+    # algorithm = use_polyleven_library
 
     # Very fast, 10k - 214s, 1000 - 2s, 100 - under a second
     # algorithm = use_levenshtein_library
     
-    # Very fast, 0.00001 s - best till now
+    # Slow, 100 - 7s - not very efficient
     # algorithm = use_levenshtein_library_parallel
     
-    # Very fast, 0.00001 s - best till now
+    # Very fast, 1000 - 0.25s, 10k - 25s
     algorithm = use_levenshtein_library_parallel_dask
 
     # Very slow, 100 - 17s
@@ -83,10 +88,7 @@ def verify_matrix_correctness(input_array, computed_matrix: np.array):
         print('Distance validation succeeded!')
     
 
-
 if __name__ == '__main__':
-    print()
-
     input_array = pd.read_csv(
         TEXT_SAMPLE_FILENAME, 
         delimiter='\n', 
@@ -99,8 +101,7 @@ if __name__ == '__main__':
     matrix = get_distance_matrix(input_array)
 
     print('')
-    verify_matrix_correctness(input_array, matrix)
+    # Verification will not work with polyleven lib and max distance
+    # verify_matrix_correctness(input_array, matrix)
 
     print()
-    
-    

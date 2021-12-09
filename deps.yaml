@@ -1,11 +1,16 @@
 name: deps
 channels:
   - defaults
+  - conda-forge
 dependencies:
-  - numpy
+  - numpy=1.21.4
   - pandas
   - openpyxl
   - xlsxwriter
   - numba
-  - cudatoolkit
+  - cudatoolkit=11.2
   - python-Levenshtein
+  - dask=2021.9.1
+  - polyleven
+  - joblib
+  - sparse
