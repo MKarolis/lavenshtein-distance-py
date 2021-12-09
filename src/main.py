@@ -1,4 +1,6 @@
-from algorithms.library_parallel import use_levenshtein_library_parallel
+# from algorithms.library_parallel import use_levenshtein_library_parallel
+from algorithms.library_parallel_Fix import use_levenshtein_library_parallel
+from algorithms.library_parallel_dask import use_levenshtein_library_parallel_dask
 from algorithms.library_python_levenshtein import use_levenshtein_library
 from algorithms.library_polyleven import use_polyleven_library
 from algorithms.dp_implementation import use_custom_dp_algorithm
@@ -27,16 +29,19 @@ def get_distance_matrix(input_array) -> np.array:
     
     # Change the following lines to apply an algorithm of your choice
     # Fastest with big datasets, 10k - 11s, 1000 - 0.9s
-    algorithm = use_joblib
+    # algorithm = use_joblib
 
     # Fastest yet, 10k - 53s, 1000 - 0.45s, 100 - 0.005617s
     # algorithm = use_polyleven_library
 
     # Very fast, 10k - 214s, 1000 - 2s, 100 - under a second
     # algorithm = use_levenshtein_library
-
+    
     # Slow, 100 - 7s - not very efficient
     # algorithm = use_levenshtein_library_parallel
+    
+    # Very fast, 1000 - 0.25s, 10k - 25s
+    algorithm = use_levenshtein_library_parallel_dask
 
     # Very slow, 100 - 17s
     # algorithm = use_custom_dp_algorithm 
