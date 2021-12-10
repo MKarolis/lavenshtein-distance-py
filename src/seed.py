@@ -3,13 +3,13 @@ import random
 import numpy as np
 from Levenshtein import distance
 
-TEST_DATA_SIZE = 1000
+TEST_DATA_SIZE = 10000
 DEFAULT_MIN_STR_LENGTH = 5
 DEFAULT_MAX_STR_LENGTH = 60
 DEFAULT_CHARS_TO_CHOOSE = string.ascii_uppercase + string.digits + string.punctuation + ' '
 
-TEXT_SAMPLE_FILENAME = './validation-data/sample.txt'
-DISTANCES_SAMPLE_FILENAME = './validation-data/distances.csv'
+TEXT_SAMPLE_FILENAME = '../validation-data/sample.txt'
+DISTANCES_SAMPLE_FILENAME = '../validation-data/distances.csv'
 
 
 def get_random_string(size=None, chars=DEFAULT_CHARS_TO_CHOOSE):
