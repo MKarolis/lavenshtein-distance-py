@@ -40,7 +40,7 @@ def get_distance_matrix(input_array) -> np.array:
     # Slow, 100 - 7s - not very efficient
     # algorithm = use_levenshtein_library_parallel
     
-    # Very fast, 1000 - 0.25s, 10k - 25s
+    # Very fast, 1000 - 0.25s, 10k - 0.5 to 0.9s
     algorithm = use_levenshtein_library_parallel_dask
 
     # Very slow, 100 - 17s
@@ -102,6 +102,6 @@ if __name__ == '__main__':
 
     print('')
     # Verification will not work with polyleven lib and max distance
-    # verify_matrix_correctness(input_array, matrix)
+    verify_matrix_correctness(input_array, matrix)
 
     print()
