@@ -11,7 +11,7 @@ import sparse
 # 2 * 1e7 - 16 GB RAM
 # 1e8     - 32 GB RAM (maximum capacity)
 # How many integers can a chunk hold?
-DESIRED_CHUNK_SIZE = 2 * 1e7
+DESIRED_CHUNK_SIZE = 1 * 1e7
 
 
 def compute_partial_matrix(x, complete_array):
@@ -21,9 +21,17 @@ def compute_partial_matrix(x, complete_array):
         dtype=int
     ), fill_value=6)
 
-def use_joblib_sparse(complete_array) -> sparse.COO:     
-    chunk_count = max(1, int((len(complete_array)**2)/DESIRED_CHUNK_SIZE))
-    worker_count = min(cpu_count(), chunk_count)
+
+def use_joblib_sparse(complete_array) -> sparse.COO:
+    sz = len(complete_array)
+    if (sz < 5000):
+        chunk_count = worker_count = 1
+    elif (sz < 20000):
+        chunk_count = worker_count = cpu_count()
+    else:
+        chunk_count = max(1, int((len(complete_array)**2)/DESIRED_CHUNK_SIZE))
+        worker_count = min(cpu_count(), chunk_count)
+    
     equal_pieces = np.array_split(complete_array, chunk_count)
 
     log_alg_start('polyleven library with joblib parallelization and sparse matrices')

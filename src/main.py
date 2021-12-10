@@ -9,6 +9,8 @@ from algorithms.diagonal_implementation import use_diagonal_dp_algorithm_base
 from algorithms.cuda_diagonal_implementation import use_diagonal_cuda_algorithm
 from algorithms.library_joblib import use_joblib
 from algorithms.library_joblib_sparse import use_joblib_sparse
+from algorithms.library_mpire import use_mpire
+from algorithms.library_ray import use_ray
 from seed import DISTANCES_SAMPLE_FILENAME, TEXT_SAMPLE_FILENAME
 import pandas as pd
 import csv
@@ -35,6 +37,11 @@ def get_distance_matrix(input_array):
 
     # Slightly slower than regular joblib, but avoids out of memory errors with big datasets 
     algorithm = use_joblib_sparse
+
+    # Three times slower than joblib
+    # algorithm = use_mpire
+    # Slower than joblib, long initialization
+    # algorithm = use_ray
 
     # Fastest yet, 10k - 53s, 1000 - 0.45s, 100 - 0.005617s
     # algorithm = use_polyleven_library
@@ -95,7 +102,8 @@ def verify_matrix_correctness(input_array, computed_matrix: np.array):
 
 if __name__ == '__main__':
     input_array = pd.read_csv(
-        TEXT_SAMPLE_FILENAME, 
+        './validation-data/sample-10mil.txt', 
+        # TEXT_SAMPLE_FILENAME, 
         delimiter='\n', 
         quoting=csv.QUOTE_NONE, 
         comment=None, 
