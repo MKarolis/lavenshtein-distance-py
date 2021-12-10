@@ -27,10 +27,10 @@ def use_levenshtein_library_parallel_dask(input_array) -> np.array:
     
     
     ## Third Method
-    w = da.from_array(input_array, chunks=(2500))
+    w = da.from_array(input_array, chunks=(2000))
     z = da.blockwise(distance.outer, 'ij', w, 'i', w, 'j', dtype='f8')
-    # matrix = z.compute(scheduler='processes')
-    matrix = z.compute()
+    matrix = z.compute(scheduler='processes')
+    # matrix = z.compute()
     
     
     log_alg_time(time.perf_counter() - start)
