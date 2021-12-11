@@ -39,8 +39,7 @@ diagonal('a', 'b')
 def use_diagonal_dp_algorithm_base(input_array) -> np.array:
     array_size = len(input_array)
 
-    log_alg_start('a dp algorithm optimised')
-
+    log_alg_start('a diagonal algorithm optimised with njit')
 
     matrix = np.zeros((array_size, array_size))
 

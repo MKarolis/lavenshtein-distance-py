@@ -1,4 +1,5 @@
 # from algorithms.library_parallel import use_levenshtein_library_parallel
+import sparse
 from algorithms.library_parallel_Fix import use_levenshtein_library_parallel
 from algorithms.library_parallel_dask import use_levenshtein_library_parallel_dask
 from algorithms.library_python_levenshtein import use_levenshtein_library
@@ -11,7 +12,7 @@ from algorithms.library_joblib import use_joblib
 from algorithms.library_joblib_sparse import use_joblib_sparse
 from algorithms.library_mpire import use_mpire
 from algorithms.library_ray import use_ray
-from seed import DISTANCES_SAMPLE_FILENAME, TEXT_SAMPLE_FILENAME
+from seed import DISTANCES_SAMPLE_FILENAME, TEXT_SAMPLE_FILENAME, SPARSE_MATRIX_OUTPUT
 import pandas as pd
 import csv
 import numpy as np
@@ -36,12 +37,12 @@ def get_distance_matrix(input_array):
     # algorithm = use_joblib
 
     # Slightly slower than regular joblib, but avoids out of memory errors with big datasets 
-    algorithm = use_joblib_sparse
+    # algorithm = use_joblib_sparse
 
     # Three times slower than joblib
     # algorithm = use_mpire
     # Slower than joblib, long initialization
-    # algorithm = use_ray
+    algorithm = use_ray
 
     # Fastest yet, 10k - 53s, 1000 - 0.45s, 100 - 0.005617s
     # algorithm = use_polyleven_library
@@ -101,9 +102,12 @@ def verify_matrix_correctness(input_array, computed_matrix: np.array):
     
 
 if __name__ == '__main__':
+    # matrix = sparse.load_npz(SPARSE_MATRIX_OUTPUT).todense()
+
+    # print('')
+
     input_array = pd.read_csv(
-        './validation-data/sample-10mil.txt', 
-        # TEXT_SAMPLE_FILENAME, 
+        TEXT_SAMPLE_FILENAME, 
         delimiter='\n', 
         quoting=csv.QUOTE_NONE, 
         comment=None, 
@@ -112,9 +116,8 @@ if __name__ == '__main__':
     )[0].to_numpy()     
 
     matrix = get_distance_matrix(input_array)
-
-    print('')
-    # Verification will not work with polyleven lib and max distance
-    # verify_matrix_correctness(input_array, matrix)
+    verify_matrix_correctness(input_array, matrix)
 
     print()
+
+    # sparse.save_npz(SPARSE_MATRIX_OUTPUT, matrix)

@@ -8,7 +8,7 @@ import ray
 
 def compute_partial_matrix(x, complete_array):
     return np.fromfunction(
-        np.vectorize(lambda i, j: levenshtein(x[i], complete_array[j], 5)), 
+        np.vectorize(lambda i, j: levenshtein(x[i], complete_array[j])), 
         (len(x), len(complete_array)), 
         dtype=int
     )

@@ -6,7 +6,6 @@ from utils import log_alg_start, log_alg_time
 
 import dask.array as da
 
-
 def use_levenshtein_library_parallel_dask(input_array) -> np.array:
     log_alg_start('parallel implementation with dask')
 
