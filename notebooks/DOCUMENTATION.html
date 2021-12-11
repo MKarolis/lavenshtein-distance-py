@@ -16472,7 +16472,7 @@ Success!
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[65]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[73]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">result_matrix</span> <span class="o">=</span> <span class="n">use_joblib_sparse</span><span class="p">(</span><span class="n">input_array</span><span class="p">)</span>
@@ -16497,7 +16497,7 @@ Success!
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>Starting the calculation of the matrix using polyleven library with joblib parallelization and sparse matrices
 Using 12 worker(s) and 12 chunks
-Execution finished in 12.490480s
+Execution finished in 10.829851s
 Memory footprint of generated sparse matrix: 247760 bytes
 </pre>
 </div>
@@ -16507,6 +16507,325 @@ Memory footprint of generated sparse matrix: 247760 bytes
 
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="Using-real-address-data">Using real address data<a class="anchor-link" href="#Using-real-address-data">&#182;</a></h1>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Development tests were done with randomly generated strings. However, as the final solution will be delivered to be used on address strings, it should be ensured that the behavior does not differ.</p>
+<p>Presented below is a script, that parses address data file and outputs files with 10k, 100k and 850k records, for both address and name fields:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[66]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Tue Nov  9 19:26:40 2021</span>
+
+<span class="sd">@author: jchet</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">path_dataset</span> <span class="o">=</span> <span class="s2">&quot;../src/data.csv&quot;</span>
+
+<span class="n">path_address10K</span> <span class="o">=</span> <span class="s2">&quot;../parsed_data/address_10K.txt&quot;</span>
+<span class="n">path_address100K</span> <span class="o">=</span> <span class="s2">&quot;../parsed_data/address_100K.txt&quot;</span>
+<span class="n">path_address1M</span> <span class="o">=</span> <span class="s2">&quot;../parsed_data/address_1M.txt&quot;</span>
+
+<span class="n">path_name10K</span> <span class="o">=</span> <span class="s2">&quot;../parsed_data/name_10K.txt&quot;</span>
+<span class="n">path_name100K</span> <span class="o">=</span> <span class="s2">&quot;../parsed_data/name_100K.txt&quot;</span>
+<span class="n">path_name1M</span> <span class="o">=</span> <span class="s2">&quot;../parsed_data/name_1M.txt&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">exportAddress</span> <span class="p">(</span><span class="n">readFilePath</span><span class="p">,</span> <span class="n">writeFilePath</span><span class="p">,</span> <span class="n">numberOfAddress</span><span class="p">,</span> <span class="n">person_address</span><span class="p">):</span>
+    
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">readFilePath</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span><span class="n">na_filter</span><span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">mydataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">person_address</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+         <span class="n">address</span> <span class="o">=</span> <span class="n">mydataset</span><span class="p">[</span><span class="s1">&#39;person_address&#39;</span><span class="p">]</span>
+         
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="n">mydataset</span><span class="p">[</span><span class="s1">&#39;person_name&#39;</span><span class="p">]</span>
+        
+    <span class="n">array</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">values</span>
+    
+    <span class="k">if</span> <span class="n">numberOfAddress</span> <span class="o">==</span> <span class="s2">&quot;10K&quot;</span><span class="p">:</span>
+        <span class="n">newFile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">writeFilePath</span><span class="p">,</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">array_10k</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">array</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">count</span><span class="o">&lt;</span><span class="mi">10000</span><span class="p">:</span>
+                <span class="n">array_10k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">newFile</span><span class="p">,</span> <span class="n">array_10k</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">footer</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s1">&#39;# &#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">newFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+    <span class="k">elif</span> <span class="n">numberOfAddress</span> <span class="o">==</span> <span class="s2">&quot;100K&quot;</span><span class="p">:</span>
+        <span class="n">newFile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">writeFilePath</span><span class="p">,</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">array_100k</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">array</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">count</span><span class="o">&lt;</span><span class="mi">100000</span><span class="p">:</span>
+                <span class="n">array_100k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">newFile</span><span class="p">,</span> <span class="n">array_100k</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">footer</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s1">&#39;# &#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">newFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">newFile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">writeFilePath</span><span class="p">,</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">newFile</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">footer</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s1">&#39;# &#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">newFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+    
+<span class="n">exportAddress</span><span class="p">(</span><span class="n">path_dataset</span><span class="p">,</span><span class="n">path_address10K</span><span class="p">,</span><span class="s2">&quot;10K&quot;</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">exportAddress</span><span class="p">(</span><span class="n">path_dataset</span><span class="p">,</span><span class="n">path_address100K</span><span class="p">,</span><span class="s2">&quot;100K&quot;</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">exportAddress</span><span class="p">(</span><span class="n">path_dataset</span><span class="p">,</span><span class="n">path_address1M</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">exportAddress</span><span class="p">(</span><span class="n">path_dataset</span><span class="p">,</span><span class="n">path_name10K</span><span class="p">,</span><span class="s2">&quot;10K&quot;</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">exportAddress</span><span class="p">(</span><span class="n">path_dataset</span><span class="p">,</span><span class="n">path_name100K</span><span class="p">,</span><span class="s2">&quot;100K&quot;</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">exportAddress</span><span class="p">(</span><span class="n">path_dataset</span><span class="p">,</span><span class="n">path_name1M</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>A function for reading a file into an array:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[70]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">read_array</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+        <span class="n">filename</span><span class="p">,</span>
+        <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> 
+        <span class="n">quoting</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_NONE</span><span class="p">,</span> 
+        <span class="n">comment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+        <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+        <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">skip_blank_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">keep_default_na</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Time to construct matrices for 10k and 100k addresses:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[74]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">result_matrix</span> <span class="o">=</span> <span class="n">use_joblib_sparse</span><span class="p">(</span><span class="n">read_array</span><span class="p">(</span><span class="n">path_address10K</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Density is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result_matrix</span><span class="o">.</span><span class="n">density</span><span class="p">))</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>Starting the calculation of the matrix using polyleven library with joblib parallelization and sparse matrices
+Using 12 worker(s) and 12 chunks
+Execution finished in 11.230845s
+Memory footprint of generated sparse matrix: 288400 bytes
+Density is 0.0001442
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[75]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">result_matrix</span> <span class="o">=</span> <span class="n">use_joblib_sparse</span><span class="p">(</span><span class="n">read_array</span><span class="p">(</span><span class="n">path_address100K</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Density is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result_matrix</span><span class="o">.</span><span class="n">density</span><span class="p">))</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>Starting the calculation of the matrix using polyleven library with joblib parallelization and sparse matrices
+Using 12 worker(s) and 1000 chunks
+Execution finished in 1135.636028s
+Memory footprint of generated sparse matrix: 581438080 bytes
+Density is 0.0029071904
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>The computation time for 100 thousand records took an expected amount of time (100 times more than with 10k records) despite additional scheduling and data copying being required. On the other hand, with 100 thousand addresses it is possible to observe higher matrix density - almost 3%.</p>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Time to construct matrices for 10k and 100k names:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[76]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">result_matrix</span> <span class="o">=</span> <span class="n">use_joblib_sparse</span><span class="p">(</span><span class="n">read_array</span><span class="p">(</span><span class="n">path_name10K</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Density is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result_matrix</span><span class="o">.</span><span class="n">density</span><span class="p">))</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>Starting the calculation of the matrix using polyleven library with joblib parallelization and sparse matrices
+Using 12 worker(s) and 12 chunks
+Execution finished in 12.411413s
+Memory footprint of generated sparse matrix: 292160 bytes
+Density is 0.00014608
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[77]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">result_matrix</span> <span class="o">=</span> <span class="n">use_joblib_sparse</span><span class="p">(</span><span class="n">read_array</span><span class="p">(</span><span class="n">path_name100K</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Density is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result_matrix</span><span class="o">.</span><span class="n">density</span><span class="p">))</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>Starting the calculation of the matrix using polyleven library with joblib parallelization and sparse matrices
+Using 12 worker(s) and 1000 chunks
+Execution finished in 1190.683515s
+Memory footprint of generated sparse matrix: 11195160 bytes
+Density is 5.59758e-05
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Difference matrix generation for names and addresses took roughly the same amount of time, however, density of names' matrix with 100 thousand records is significantly lower. Therefore, we can conclude, that in the dataset provided there was more variation in names than addresses of the people.</p>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h1><p>During the implementation of the project several different approaches towards Levenshtein distance calculation and parallelization were tested. The most effective method turned out to be using a pre-existing C-written library and parallelization on CPU level. The worst performing solution would have been to write the code in python, as it is extremely slow. Base python multiprocessing library also did not show as good performance as multiprocessing libraries, joblib exceeded as the most performant one, CPU parallelization cut down the execution time by 400-500%.</p>
+<p>GPU parallelization of the inner loop, on the other hand, proved to be inefficient with a large amount of short strings.</p>
+<p>For further investigation of the problem, parallelizing the outer loop with GPU could be an interesting option, as well as writing the problem-specific code in C and using it as a library. Cloud computing or distributed computing (using MPI, ray, dask) could also be investigated.</p>
+
+</div>
 </div>
 </body>
 

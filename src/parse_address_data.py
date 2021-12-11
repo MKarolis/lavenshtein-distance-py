@@ -6,8 +6,6 @@ Created on Tue Nov  9 19:26:40 2021
 """
 
 import pandas as pd
-import re
-import csv
 import numpy as np
 
 path_dataset = "./src/data.csv"
@@ -65,12 +63,11 @@ def exportAddress (readFilePath, writeFilePath, numberOfAddress, person_address)
         newFile.close()
         
     
+if __name__ == '__main__':        
+    exportAddress(path_dataset,path_address10K,"10K",True)
+    exportAddress(path_dataset,path_address100K,"100K",True)
+    exportAddress(path_dataset,path_address1M,"",True)
 
-    
-exportAddress(path_dataset,path_address10K,"10K",True)
-exportAddress(path_dataset,path_address100K,"100K",True)
-exportAddress(path_dataset,path_address1M,"",True)
-
-exportAddress(path_dataset,path_name10K,"10K",False)
-exportAddress(path_dataset,path_name100K,"100K",False)
-exportAddress(path_dataset,path_name1M,"",False)
+    exportAddress(path_dataset,path_name10K,"10K",False)
+    exportAddress(path_dataset,path_name100K,"100K",False)
+    exportAddress(path_dataset,path_name1M,"",False)

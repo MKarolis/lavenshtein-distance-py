@@ -37,12 +37,12 @@ def get_distance_matrix(input_array):
     # algorithm = use_joblib
 
     # Slightly slower than regular joblib, but avoids out of memory errors with big datasets 
-    # algorithm = use_joblib_sparse
+    algorithm = use_joblib_sparse
 
     # Three times slower than joblib
     # algorithm = use_mpire
     # Slower than joblib, long initialization
-    algorithm = use_ray
+    # algorithm = use_ray
 
     # Fastest yet, 10k - 53s, 1000 - 0.45s, 100 - 0.005617s
     # algorithm = use_polyleven_library
