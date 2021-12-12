@@ -7,7 +7,7 @@ from algorithms.library_polyleven import use_polyleven_library
 from algorithms.dp_implementation import use_custom_dp_algorithm
 from algorithms.dp_implementation_numba import use_custom_dp_algorithm_optimized
 from algorithms.diagonal_implementation import use_diagonal_dp_algorithm_base
-from algorithms.cuda_diagonal_implementation import use_diagonal_cuda_algorithm
+# from algorithms.cuda_diagonal_implementation import use_diagonal_cuda_algorithm
 from algorithms.library_joblib import use_joblib
 from algorithms.library_joblib_sparse import use_joblib_sparse
 from algorithms.library_mpire import use_mpire
