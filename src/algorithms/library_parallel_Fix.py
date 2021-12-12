@@ -1,7 +1,7 @@
 import numpy as np
 import time
 from Levenshtein import distance
-from multiprocessing import Process, cpu_count, Pipe, Pool
+from multiprocessing import cpu_count, Pool
 from functools import partial
 
 import numexpr as ne
@@ -13,16 +13,6 @@ from utils import log_alg_start, log_alg_time
 def dist(a, b):
     return distance(a,b)
 
-    
-# =============================================================================
-# def calculatePartialMatrix(input_array, x, send_end):
-#     matrix = np.fromfunction(
-#         np.vectorize(lambda i, j: dist(x[i], input_array[j])), 
-#         (len(x), len(input_array)), 
-#         dtype=int
-#     )
-#     send_end.send(matrix)
-# =============================================================================
    
 def calculatePartialMatrix(tuples):
     list1 = tuples[0].tolist()
@@ -30,17 +20,6 @@ def calculatePartialMatrix(tuples):
     matrix = np.fromfunction(
         np.vectorize(lambda i, j: dist(list2[i], list1[j])), 
         (len(list2), len(list1)), 
-        dtype=int
-    )
-    return matrix
-
-
-def f(array):
-    print('hello')
-    
-    matrix = np.fromfunction(
-        np.vectorize(lambda i, j: distance(array[i], array[j])), 
-        (len(array), len(array)), 
         dtype=int
     )
     return matrix
@@ -71,10 +50,7 @@ def use_levenshtein_library_parallel(complete_array) -> np.array:
         
     for r in result_objs:
         for j in r:
-            # print(r)
             final = np.append(final, j, axis= 0)
-    
-    print(final)        
     
     log_alg_time(time.perf_counter() - start)
     
