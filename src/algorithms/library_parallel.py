@@ -43,11 +43,6 @@ def use_levenshtein_library_parallel(complete_array) -> np.array:
     final = np.empty([0,array_size], int)
     for r in result:
         final = np.append(final, r, axis= 0)
-        # print()
-        # print(r)
-
-    # print()
-    # print(final)
 
     log_alg_time(time.perf_counter() - start)
 
